@@ -81,7 +81,7 @@ contract Falcon
     uint32 constant private R   = 4091;
     uint32 constant private R2  = 10952;
 
-    uint16[1024] constant private GMb =                           // [128 rows of 8 16bit values: 1024*2=2048 bytes]
+    uint16[1024] /*constant*/ private GMb =                           // [128 rows of 8 16bit values: 1024*2=2048 bytes]
     [
         4091,  7888, 11060, 11208,  6960,  4342,  6275,  9759,
         1591,  6399,  9477,  5266,   586,  5825,  7538,  9710,
@@ -543,60 +543,12 @@ contract Falcon
     }
 
     ////////////////////////////////////////
-    // Convert a polynomial (mod q) to Montgomery representation.
-    ////////////////////////////////////////
-    function mq_poly_tomonty(uint16[] memory pWordArrayF, uint32 logn) private pure
-    {
-        uint32  u;
-        uint32  n;
-
-        n = uint32(1) << logn;
-        for (u = 0; u < n; u++)
-        {
-            pWordArrayF[u] = uint16(LibUtils.mq_montymul(pWordArrayF[u], R2));
-        }
-    }
-
-    ////////////////////////////////////////
-    // Multiply two polynomials together (NTT representation, and using
-    // a Montgomery multiplication). Result f*g is written over f.
-    ////////////////////////////////////////
-    function mq_poly_montymul_ntt(uint16[] memory pWordArrayF, uint16[] memory pWordArrayG, uint32 logn) private pure
-    {
-        uint32  u;
-        uint32  n;
-
-        n = uint32(1) << logn;
-        for (u = 0; u < n; u++)
-        {
-            pWordArrayF[u] = uint16(LibUtils.mq_montymul(pWordArrayF[u], pWordArrayG[u]));
-        }
-    }
-
-    ////////////////////////////////////////
-    // Subtract polynomial g from polynomial f.
-    ////////////////////////////////////////
-    function mq_poly_sub(uint16[] memory pWordArrayF, uint16[] memory pWordArrayG, uint32 logn) private pure
-    {
-        uint32  u;
-        uint32  n;
-
-        n = uint32(1) << logn;
-        for (u = 0; u < n; u++)
-        {
-            pWordArrayF[u] = uint16(LibUtils.mq_sub(pWordArrayF[u], pWordArrayG[u]));
-        }
-    }
-
-    /* ===================================================================== */
-
-    ////////////////////////////////////////
     //
     ////////////////////////////////////////
     function PQCLEAN_FALCON512_CLEAN_to_ntt_monty(uint16[] memory pWordArrayH, uint32 logn) public view
     {
         mq_NTT(pWordArrayH, logn);
-        mq_poly_tomonty(pWordArrayH, logn);
+        LibUtils.mq_poly_tomonty(pWordArrayH, logn);
     }
 
 
@@ -1120,9 +1072,9 @@ contract Falcon
 
         // Compute -s1 = s2*h - c0 mod phi mod q (in pWorkingStorageWords[]).
         mq_NTT(pWorkingStorageWords, logn);
-        mq_poly_montymul_ntt(pWorkingStorageWords, pH, logn);
+        LibUtils.mq_poly_montymul_ntt(pWorkingStorageWords, pH, logn);
         mq_iNTT(pWorkingStorageWords, logn);
-        mq_poly_sub(pWorkingStorageWords, c0, logn);
+        LibUtils.mq_poly_sub(pWorkingStorageWords, c0, logn);
 
         // Normalize -s1 elements into the [-q/2..q/2] range.
         for (u = 0; u < n; u++)

@@ -4,6 +4,7 @@ library LibUtils {
     // uint16[16] /*constant*/ private FALCON_PUBKEY_SIZE            = [5,5,8,15,29,57,113,225,449,897,1793,3585,7169,14337,28673,57345];
     uint32 constant private Q   = 12289;
     uint32 constant private Q0I = 12287;
+    uint32 constant private R2  = 10952;
 
     ////////////////////////////////////////
     // Solidity implementation of the macro...
@@ -132,6 +133,97 @@ library LibUtils {
     //     y18 = mq_montymul(y17, y0);
 
     //     return mq_montymul(y18, x);
+    // }
+
+    ////////////////////////////////////////
+    // Convert a polynomial (mod q) to Montgomery representation.
+    ////////////////////////////////////////
+    function mq_poly_tomonty(uint16[] memory pWordArrayF, uint32 logn) public pure
+    {
+        uint32  u;
+        uint32  n;
+
+        n = uint32(1) << logn;
+        for (u = 0; u < n; u++)
+        {
+            pWordArrayF[u] = uint16(mq_montymul(pWordArrayF[u], R2));
+        }
+    }
+
+    ////////////////////////////////////////
+    // Multiply two polynomials together (NTT representation, and using
+    // a Montgomery multiplication). Result f*g is written over f.
+    ////////////////////////////////////////
+    function mq_poly_montymul_ntt(uint16[] memory pWordArrayF, uint16[] memory pWordArrayG, uint32 logn) public pure
+    {
+        uint32  u;
+        uint32  n;
+
+        n = uint32(1) << logn;
+        for (u = 0; u < n; u++)
+        {
+            pWordArrayF[u] = uint16(mq_montymul(pWordArrayF[u], pWordArrayG[u]));
+        }
+    }
+
+    ////////////////////////////////////////
+    // Subtract polynomial g from polynomial f.
+    ////////////////////////////////////////
+    function mq_poly_sub(uint16[] memory pWordArrayF, uint16[] memory pWordArrayG, uint32 logn) public pure
+    {
+        uint32  u;
+        uint32  n;
+
+        n = uint32(1) << logn;
+        for (u = 0; u < n; u++)
+        {
+            pWordArrayF[u] = uint16(mq_sub(pWordArrayF[u], pWordArrayG[u]));
+        }
+    }
+
+    // ////////////////////////////////////////
+    // // Compute NTT on a ring element.
+    // // JG: Number-theoretic transform
+    // ////////////////////////////////////////
+    // function mq_NTT(uint16[] memory pWordArray, uint32 logn) public view
+    // {
+    //     uint32  n;
+    //     uint32  t;
+    //     uint32  m;
+
+    //     n = uint32(1) << logn;
+    //     t = n;
+    //     for (m = 1; m < n; m <<= 1)
+    //     {
+    //         uint32  ht;
+    //         uint32  i;
+    //         uint32  j1;
+
+    //         ht = t >> 1;
+    //         j1 = 0;
+    //         for (i = 0; i < m; i++)
+    //         {
+    //             uint32 j;
+    //             uint32 j2;
+    //             uint32 s;
+
+    //             s = GMb[m + i];
+    //             j2 = j1 + ht;
+    //             for (j = j1; j < j2; j++)
+    //             {
+    //                 uint32 u;
+    //                 uint32 v;
+
+    //                 u = pWordArray[j];
+    //                 v = mq_montymul(pWordArray[j + ht], s);
+    //                 pWordArray[j]      = uint16(mq_add(u, v));
+    //                 pWordArray[j + ht] = uint16(mq_sub(u, v));
+    //             }
+    //             j1 += t;
+    //         }
+
+    //         t = ht;
+    //     }
     // }
 
     function PQCLEAN_FALCON512_CLEAN_is_short(uint16[] memory s1, int16[] memory s2, uint32 logn) public pure returns (int16)
