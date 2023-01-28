@@ -577,7 +577,7 @@ contract Falcon
 
         for (round = 0; round < NROUNDS; round += 2)
         {
-            //////////////////////////////////////////////////
+            ////////////////////////////////////////////////
             // prepareTheta
             BCa = Aba ^ Aga ^ Aka ^ Ama ^ Asa;
             BCe = Abe ^ Age ^ Ake ^ Ame ^ Ase;
@@ -587,22 +587,22 @@ contract Falcon
 
             //////////////////////////////////////////////////
             // thetaRhoPiChiIotaPrepareTheta(round  , A, E)
-            Da = BCu ^ LibUtils.ROL(BCe, 1);
-            De = BCa ^ LibUtils.ROL(BCi, 1);
-            Di = BCe ^ LibUtils.ROL(BCo, 1);
-            Do = BCi ^ LibUtils.ROL(BCu, 1);
-            Du = BCo ^ LibUtils.ROL(BCa, 1);
+            Da = BCu ^ ((BCe) << (1)) ^ ((BCe) >> (64 - (1)));
+            De = BCa ^ ((BCi) << (1)) ^ ((BCi) >> (64 - (1)));
+            Di = BCe ^ ((BCo) << (1)) ^ ((BCo) >> (64 - (1)));
+            Do = BCi ^ ((BCu) << (1)) ^ ((BCu) >> (64 - (1)));
+            Du = BCo ^ ((BCa) << (1)) ^ ((BCa) >> (64 - (1)));
             Aba ^= Da;
             BCa = Aba;
 
             Age ^= De;
-            BCe = LibUtils.ROL(Age, 44);
+            BCe = ((Age) << (44)) ^ ((Age) >> (64 - (44)));
             Aki ^= Di;
-            BCi = LibUtils.ROL(Aki, 43);
+            BCi = ((Aki) << (43)) ^ ((Aki) >> (64 - (43)));
             Amo ^= Do;
-            BCo = LibUtils.ROL(Amo, 21);
+            BCo = ((Amo) << (21)) ^ ((Amo) >> (64 - (21)));
             Asu ^= Du;
-            BCu = LibUtils.ROL(Asu, 14);
+            BCu = ((Asu) << (14)) ^ ((Asu) >> (64 - (14)));
             Eba = BCa ^ ((~BCe) & BCi);
             Eba ^= KeccakF_RoundConstants[uint256(round)];
             Ebe = BCe ^ ((~BCi) & BCo);
@@ -611,15 +611,15 @@ contract Falcon
             Ebu = BCu ^ ((~BCa) & BCe);
 
             Abo ^= Do;
-            BCa = LibUtils.ROL(Abo, 28);
+            BCa = ((Abo) << (28)) ^ ((Abo) >> (64 - (28)));
             Agu ^= Du;
-            BCe = LibUtils.ROL(Agu, 20);
+            BCe = ((Agu) << (20)) ^ ((Agu) >> (64 - (20)));
             Aka ^= Da;
-            BCi = LibUtils.ROL(Aka, 3);
+            BCi = ((Aka) << (3)) ^ ((Aka) >> (64 - (3)));
             Ame ^= De;
-            BCo = LibUtils.ROL(Ame, 45);
+            BCo = ((Ame) << (45)) ^ ((Ame) >> (64 - (45)));
             Asi ^= Di;
-            BCu = LibUtils.ROL(Asi, 61);
+            BCu = ((Asi) << (61)) ^ ((Asi) >> (64 - (61)));
             Ega = BCa ^ ((~BCe) & BCi);
             Ege = BCe ^ ((~BCi) & BCo);
             Egi = BCi ^ ((~BCo) & BCu);
@@ -627,15 +627,15 @@ contract Falcon
             Egu = BCu ^ ((~BCa) & BCe);
 
             Abe ^= De;
-            BCa = LibUtils.ROL(Abe, 1);
+            BCa = ((Abe) << (1)) ^ ((Abe) >> (64 - (1)));
             Agi ^= Di;
-            BCe = LibUtils.ROL(Agi, 6);
+            BCe = ((Agi) << (6)) ^ ((Agi) >> (64 - (6)));
             Ako ^= Do;
-            BCi = LibUtils.ROL(Ako, 25);
+            BCi = ((Ako) << (25)) ^ ((Ako) >> (64 - (25)));
             Amu ^= Du;
-            BCo = LibUtils.ROL(Amu, 8);
+            BCo = ((Amu) << (8)) ^ ((Amu) >> (64 - (8)));
             Asa ^= Da;
-            BCu = LibUtils.ROL(Asa, 18);
+            BCu = ((Asa) << (18)) ^ ((Asa) >> (64 - (18)));
             Eka = BCa ^ ((~BCe) & BCi);
             Eke = BCe ^ ((~BCi) & BCo);
             Eki = BCi ^ ((~BCo) & BCu);
@@ -643,15 +643,15 @@ contract Falcon
             Eku = BCu ^ ((~BCa) & BCe);
 
             Abu ^= Du;
-            BCa = LibUtils.ROL(Abu, 27);
+            BCa = ((Abu) << (27)) ^ ((Abu) >> (64 - (27)));
             Aga ^= Da;
-            BCe = LibUtils.ROL(Aga, 36);
+            BCe = ((Aga) << (36)) ^ ((Aga) >> (64 - (36)));
             Ake ^= De;
-            BCi = LibUtils.ROL(Ake, 10);
+            BCi = ((Ake) << (10)) ^ ((Ake) >> (64 - (10)));
             Ami ^= Di;
-            BCo = LibUtils.ROL(Ami, 15);
+            BCo = ((Ami) << (15)) ^ ((Ami) >> (64 - (15)));
             Aso ^= Do;
-            BCu = LibUtils.ROL(Aso, 56);
+            BCu = ((Aso) << (56)) ^ ((Aso) >> (64 - (56)));
             Ema = BCa ^ ((~BCe) & BCi);
             Eme = BCe ^ ((~BCi) & BCo);
             Emi = BCi ^ ((~BCo) & BCu);
@@ -659,15 +659,15 @@ contract Falcon
             Emu = BCu ^ ((~BCa) & BCe);
 
             Abi ^= Di;
-            BCa = LibUtils.ROL(Abi, 62);
+            BCa = ((Abi) << (62)) ^ ((Abi) >> (64 - (62)));
             Ago ^= Do;
-            BCe = LibUtils.ROL(Ago, 55);
+            BCe = ((Ago) << (55)) ^ ((Ago) >> (64 - (55)));
             Aku ^= Du;
-            BCi = LibUtils.ROL(Aku, 39);
+            BCi = ((Aku) << (39)) ^ ((Aku) >> (64 - (39)));
             Ama ^= Da;
-            BCo = LibUtils.ROL(Ama, 41);
+            BCo = ((Ama) << (41)) ^ ((Ama) >> (64 - (41)));
             Ase ^= De;
-            BCu = LibUtils.ROL(Ase, 2);
+            BCu = ((Ase) << (2)) ^ ((Ase) >> (64 - (2)));
             Esa = BCa ^ ((~BCe) & BCi);
             Ese = BCe ^ ((~BCi) & BCo);
             Esi = BCi ^ ((~BCo) & BCu);
@@ -684,22 +684,22 @@ contract Falcon
 
             //////////////////////////////////////////////////
             // thetaRhoPiChiIotaPrepareTheta(round+1, E, A)
-            Da = BCu ^ LibUtils.ROL(BCe, 1);
-            De = BCa ^ LibUtils.ROL(BCi, 1);
-            Di = BCe ^ LibUtils.ROL(BCo, 1);
-            Do = BCi ^ LibUtils.ROL(BCu, 1);
-            Du = BCo ^ LibUtils.ROL(BCa, 1);
+            Da = BCu ^ ((BCe) << (1)) ^ ((BCe) >> (64 - (1)));
+            De = BCa ^ ((BCi) << (1)) ^ ((BCi) >> (64 - (1)));
+            Di = BCe ^ ((BCo) << (1)) ^ ((BCo) >> (64 - (1)));
+            Do = BCi ^ ((BCu) << (1)) ^ ((BCu) >> (64 - (1)));
+            Du = BCo ^ ((BCa) << (1)) ^ ((BCa) >> (64 - (1)));
             Eba ^= Da;
             BCa = Eba;
 
             Ege ^= De;
-            BCe = LibUtils.ROL(Ege, 44);
+            BCe = ((Ege) << (44)) ^ ((Ege) >> (64 - (44)));
             Eki ^= Di;
-            BCi = LibUtils.ROL(Eki, 43);
+            BCi = ((Eki) << (43)) ^ ((Eki) >> (64 - (43)));
             Emo ^= Do;
-            BCo = LibUtils.ROL(Emo, 21);
+            BCo = ((Emo) << (21)) ^ ((Emo) >> (64 - (21)));
             Esu ^= Du;
-            BCu = LibUtils.ROL(Esu, 14);
+            BCu = ((Esu) << (14)) ^ ((Esu) >> (64 - (14)));
             Aba = BCa ^ ((~BCe) & BCi);
             Aba ^= KeccakF_RoundConstants[uint256(round + 1)];
             Abe = BCe ^ ((~BCi) & BCo);
@@ -708,15 +708,15 @@ contract Falcon
             Abu = BCu ^ ((~BCa) & BCe);
 
             Ebo ^= Do;
-            BCa = LibUtils.ROL(Ebo, 28);
+            BCa = ((Ebo) << (28)) ^ ((Ebo) >> (64 - (28)));
             Egu ^= Du;
-            BCe = LibUtils.ROL(Egu, 20);
+            BCe = ((Egu) << (20)) ^ ((Egu) >> (64 - (20)));
             Eka ^= Da;
-            BCi = LibUtils.ROL(Eka, 3);
+            BCi = ((Eka) << (3)) ^ ((Eka) >> (64 - (3)));
             Eme ^= De;
-            BCo = LibUtils.ROL(Eme, 45);
+            BCo = ((Eme) << (45)) ^ ((Eme) >> (64 - (45)));
             Esi ^= Di;
-            BCu = LibUtils.ROL(Esi, 61);
+            BCu = ((Esi) << (61)) ^ ((Esi) >> (64 - (61)));
             Aga = BCa ^ ((~BCe) & BCi);
             Age = BCe ^ ((~BCi) & BCo);
             Agi = BCi ^ ((~BCo) & BCu);
@@ -724,15 +724,15 @@ contract Falcon
             Agu = BCu ^ ((~BCa) & BCe);
 
             Ebe ^= De;
-            BCa = LibUtils.ROL(Ebe, 1);
+            BCa = ((Ebe) << (1)) ^ ((Ebe) >> (64 - (1)));
             Egi ^= Di;
-            BCe = LibUtils.ROL(Egi, 6);
+            BCe = ((Egi) << (6)) ^ ((Egi) >> (64 - (6)));
             Eko ^= Do;
-            BCi = LibUtils.ROL(Eko, 25);
+            BCi = ((Eko) << (25)) ^ ((Eko) >> (64 - (25)));
             Emu ^= Du;
-            BCo = LibUtils.ROL(Emu, 8);
+            BCo = ((Emu) << (8)) ^ ((Emu) >> (64 - (8)));
             Esa ^= Da;
-            BCu = LibUtils.ROL(Esa, 18);
+            BCu = ((Esa) << (18)) ^ ((Esa) >> (64 - (18)));
             Aka = BCa ^ ((~BCe) & BCi);
             Ake = BCe ^ ((~BCi) & BCo);
             Aki = BCi ^ ((~BCo) & BCu);
@@ -740,15 +740,15 @@ contract Falcon
             Aku = BCu ^ ((~BCa) & BCe);
 
             Ebu ^= Du;
-            BCa = LibUtils.ROL(Ebu, 27);
+            BCa = ((Ebu) << (27)) ^ ((Ebu) >> (64 - (27)));
             Ega ^= Da;
-            BCe = LibUtils.ROL(Ega, 36);
+            BCe = ((Ega) << (36)) ^ ((Ega) >> (64 - (36)));
             Eke ^= De;
-            BCi = LibUtils.ROL(Eke, 10);
+            BCi = ((Eke) << (10)) ^ ((Eke) >> (64 - (10)));
             Emi ^= Di;
-            BCo = LibUtils.ROL(Emi, 15);
+            BCo = ((Emi) << (15)) ^ ((Emi) >> (64 - (15)));
             Eso ^= Do;
-            BCu = LibUtils.ROL(Eso, 56);
+            BCu = ((Eso) << (56)) ^ ((Eso) >> (64 - (56)));
             Ama = BCa ^ ((~BCe) & BCi);
             Ame = BCe ^ ((~BCi) & BCo);
             Ami = BCi ^ ((~BCo) & BCu);
@@ -756,15 +756,15 @@ contract Falcon
             Amu = BCu ^ ((~BCa) & BCe);
 
             Ebi ^= Di;
-            BCa = LibUtils.ROL(Ebi, 62);
+            BCa = ((Ebi) << (62)) ^ ((Ebi) >> (64 - (62)));
             Ego ^= Do;
-            BCe = LibUtils.ROL(Ego, 55);
+            BCe = ((Ego) << (55)) ^ ((Ego) >> (64 - (55)));
             Eku ^= Du;
-            BCi = LibUtils.ROL(Eku, 39);
+            BCi = ((Eku) << (39)) ^ ((Eku) >> (64 - (39)));
             Ema ^= Da;
-            BCo = LibUtils.ROL(Ema, 41);
+            BCo = ((Ema) << (41)) ^ ((Ema) >> (64 - (41)));
             Ese ^= De;
-            BCu = LibUtils.ROL(Ese, 2);
+            BCu = ((Ese) << (2)) ^ ((Ese) >> (64 - (2)));
             Asa = BCa ^ ((~BCe) & BCi);
             Ase = BCe ^ ((~BCi) & BCo);
             Asi = BCi ^ ((~BCo) & BCu);
@@ -827,7 +827,7 @@ contract Falcon
 
             // Input parameters supplied in member variable shake256_context64.
             // Output values are written to the same member variable.
-            KeccakF1600_StatePermute();
+            // KeccakF1600_StatePermute();
         }
 
         for (i = 0; i < cbInput; i++)
@@ -874,7 +874,7 @@ contract Falcon
         {
             // Input parameters supplied in member variable shake256_context64.
             // Output values are written to the same member variable.
-            KeccakF1600_StatePermute();
+            // KeccakF1600_StatePermute();
             for (i = 0; i < outlen && i < r; i++)
             {
                 h[h_offset + i] = uint8(shake256_context64[i >> 3] >> (8 * (i & 0x07)));
