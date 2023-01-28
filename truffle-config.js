@@ -20,11 +20,12 @@ module.exports = {
       version: "^0.7.0",
       settings: {
         optimizer: {
-          enabled: true,
-          runs: 5
+          enabled: false,
+          runs: 1
         }
       }
     }
   },
   contracts_directory: ["./libraries/Utils"],
+  plugins: ["truffle-contract-size"],
 };

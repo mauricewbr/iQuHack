@@ -81,7 +81,7 @@ contract Falcon
     uint32 constant private R   = 4091;
     uint32 constant private R2  = 10952;
 
-    uint16[1024] /*constant*/ private GMb =                           // [128 rows of 8 16bit values: 1024*2=2048 bytes]
+    uint16[1024] constant private GMb =                           // [128 rows of 8 16bit values: 1024*2=2048 bytes]
     [
         4091,  7888, 11060, 11208,  6960,  4342,  6275,  9759,
         1591,  6399,  9477,  5266,   586,  5825,  7538,  9710,
@@ -374,63 +374,63 @@ contract Falcon
     }
 
 
-    ////////////////////////////////////////
-    // Montgomery squaring (computes (x^2)/R).
-    ////////////////////////////////////////
-    function mq_montysqr(uint32 x) private pure returns (uint32 result)
-    {
-        return LibUtils.mq_montymul(x, x);
-    }
+    // ////////////////////////////////////////
+    // // Montgomery squaring (computes (x^2)/R).
+    // ////////////////////////////////////////
+    // function mq_montysqr(uint32 x) private pure returns (uint32 result)
+    // {
+    //     return LibUtils.mq_montymul(x, x);
+    // }
 
-    ////////////////////////////////////////
-    // Divide x by y modulo q = 12289.
-    ////////////////////////////////////////
-    function mq_div_12289(uint32 x, uint32 y) private pure returns (uint32 result)
-    {
-    /*$off*/
-        uint32    y0;
-        uint32    y1;
-        uint32    y2;
-        uint32    y3;
-        uint32    y4;
-        uint32    y5;
-        uint32    y6;
-        uint32    y7;
-        uint32    y8;
-        uint32    y9;
-        uint32    y10;
-        uint32    y11;
-        uint32    y12;
-        uint32    y13;
-        uint32    y14;
-        uint32    y15;
-        uint32    y16;
-        uint32    y17;
-        uint32    y18;
-    /*$on*/
+    // ////////////////////////////////////////
+    // // Divide x by y modulo q = 12289.
+    // ////////////////////////////////////////
+    // function mq_div_12289(uint32 x, uint32 y) private pure returns (uint32 result)
+    // {
+    // /*$off*/
+    //     uint32    y0;
+    //     uint32    y1;
+    //     uint32    y2;
+    //     uint32    y3;
+    //     uint32    y4;
+    //     uint32    y5;
+    //     uint32    y6;
+    //     uint32    y7;
+    //     uint32    y8;
+    //     uint32    y9;
+    //     uint32    y10;
+    //     uint32    y11;
+    //     uint32    y12;
+    //     uint32    y13;
+    //     uint32    y14;
+    //     uint32    y15;
+    //     uint32    y16;
+    //     uint32    y17;
+    //     uint32    y18;
+    // /*$on*/
 
-        y0 = LibUtils.mq_montymul(y, R2);
-        y1 = mq_montysqr(y0);
-        y2 = LibUtils.mq_montymul(y1, y0);
-        y3 = LibUtils.mq_montymul(y2, y1);
-        y4 = mq_montysqr(y3);
-        y5 = mq_montysqr(y4);
-        y6 = mq_montysqr(y5);
-        y7 = mq_montysqr(y6);
-        y8 = mq_montysqr(y7);
-        y9 = LibUtils.mq_montymul(y8, y2);
-        y10 = LibUtils.mq_montymul(y9, y8);
-        y11 = mq_montysqr(y10);
-        y12 = mq_montysqr(y11);
-        y13 = LibUtils.mq_montymul(y12, y9);
-        y14 = mq_montysqr(y13);
-        y15 = mq_montysqr(y14);
-        y16 = LibUtils.mq_montymul(y15, y10);
-        y17 = mq_montysqr(y16);
-        y18 = LibUtils.mq_montymul(y17, y0);
+    //     y0 = LibUtils.mq_montymul(y, R2);
+    //     y1 = LibUtils.mq_montysqr(y0);
+    //     y2 = LibUtils.mq_montymul(y1, y0);
+    //     y3 = LibUtils.mq_montymul(y2, y1);
+    //     y4 = LibUtils.mq_montysqr(y3);
+    //     y5 = LibUtils.mq_montysqr(y4);
+    //     y6 = LibUtils.mq_montysqr(y5);
+    //     y7 = LibUtils.mq_montysqr(y6);
+    //     y8 = LibUtils.mq_montysqr(y7);
+    //     y9 = LibUtils.mq_montymul(y8, y2);
+    //     y10 = LibUtils.mq_montymul(y9, y8);
+    //     y11 = LibUtils.mq_montysqr(y10);
+    //     y12 = LibUtils.mq_montysqr(y11);
+    //     y13 = LibUtils.mq_montymul(y12, y9);
+    //     y14 = LibUtils.mq_montysqr(y13);
+    //     y15 = LibUtils.mq_montysqr(y14);
+    //     y16 = LibUtils.mq_montymul(y15, y10);
+    //     y17 = LibUtils.mq_montysqr(y16);
+    //     y18 = LibUtils.mq_montymul(y17, y0);
 
-        return LibUtils.mq_montymul(y18, x);
-    }
+    //     return LibUtils.mq_montymul(y18, x);
+    // }
 
 
     // ------------------------------------------------------------------------------------------------------------------------
