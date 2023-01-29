@@ -39,7 +39,7 @@ contract Falcon
     uint32 constant private SHAKE256_RATE = 136;  // The SHAKE-256 byte absorption rate (aka OQS_SHA3_SHAKE256_RATE)    // [4+2+2+2=10 bytes]
     int16  constant private CTX_ELEMENTS = 26; // Number of uint64 context elements
     int16  constant private PQC_SHAKEINCCTX_BYTES = (8 * CTX_ELEMENTS); // (sizeof(uint64) * 26)
-    int16  constant private NROUNDS = 24;
+    int16  constant private NROUNDS = 12;
 
     // From: pqclean.c
     uint16 constant private PQCLEAN_FALCON512_CLEAN_CRYPTO_SECRETKEYBYTES = 1281;         // [3*2=6 bytes]
@@ -564,21 +564,41 @@ contract Falcon
     // Input parameters supplied in member variable shake256_context64.
     // Output values are written to the same member variable.
     ////////////////////////////////////////
-    function KeccakF1600_StatePermute() public payable
+    function KeccakF1600_24_StatePermute() public payable
     {
         int         round;
+        
+          // copyFromState(A, state)
+    Aba = shake256_context64[ 0]; Abe = shake256_context64[ 1]; Abi = shake256_context64[ 2]; Abo = shake256_context64[ 3]; Abu = shake256_context64[ 4];
+    Aga = shake256_context64[ 5]; Age = shake256_context64[ 6]; Agi = shake256_context64[ 7]; Ago = shake256_context64[ 8]; Agu = shake256_context64[ 9];
+    Aka = shake256_context64[10]; Ake = shake256_context64[11]; Aki = shake256_context64[12]; Ako = shake256_context64[13]; Aku = shake256_context64[14];
+    Ama = shake256_context64[15]; Ame = shake256_context64[16]; Ami = shake256_context64[17]; Amo = shake256_context64[18]; Amu = shake256_context64[19];
+    Asa = shake256_context64[20]; Ase = shake256_context64[21]; Asi = shake256_context64[22]; Aso = shake256_context64[23]; Asu = shake256_context64[24];
+
+    for (round = 0; round < NROUNDS; round += 2)
+    {
+        //////////////////////////////////////////////////
+        
+     
+        
+        
 
         // copyFromState(A, state)
-        Aba = shake256_context64[ 0]; Abe = shake256_context64[ 1]; Abi = shake256_context64[ 2]; Abo = shake256_context64[ 3]; Abu = shake256_context64[ 4];
-        Aga = shake256_context64[ 5]; Age = shake256_context64[ 6]; Agi = shake256_context64[ 7]; Ago = shake256_context64[ 8]; Agu = shake256_context64[ 9];
-        Aka = shake256_context64[10]; Ake = shake256_context64[11]; Aki = shake256_context64[12]; Ako = shake256_context64[13]; Aku = shake256_context64[14];
-        Ama = shake256_context64[15]; Ame = shake256_context64[16]; Ami = shake256_context64[17]; Amo = shake256_context64[18]; Amu = shake256_context64[19];
-        Asa = shake256_context64[20]; Ase = shake256_context64[21]; Asi = shake256_context64[22]; Aso = shake256_context64[23]; Asu = shake256_context64[24];
+       // Aba = shake256_context64[ 0]; Abe = shake256_context64[ 1]; Abi = shake256_context64[ 2]; Abo = shake256_context64[ 3]; Abu = shake256_context64[ 4];
+       // Aga = shake256_context64[ 5]; Age = shake256_context64[ 6]; Agi = shake256_context64[ 7]; Ago = shake256_context64[ 8]; Agu = shake256_context64[ 9];
+     //   Aka = shake256_context64[10]; Ake = shake256_context64[11]; Aki = shake256_context64[12]; Ako = shake256_context64[13]; Aku = shake256_context64[14];
+     //   Ama = shake256_context64[15]; Ame = shake256_context64[16]; Ami = shake256_context64[17]; Amo = shake256_context64[18]; Amu = shake256_context64[19];
+      //  Asa = shake256_context64[20]; Ase = shake256_context64[21]; Asi = shake256_context64[22]; Aso = shake256_context64[23]; Asu = shake256_context64[24];
 
-        for (round = 0; round < NROUNDS; round += 2)
-        {
+       // for (round = 0; round < NROUNDS; round += 2)
+      //  {
             ////////////////////////////////////////////////
             // prepareTheta
+            
+            
+            
+            
+            
             BCa = Aba ^ Aga ^ Aka ^ Ama ^ Asa;
             BCe = Abe ^ Age ^ Ake ^ Ame ^ Ase;
             BCi = Abi ^ Agi ^ Aki ^ Ami ^ Asi;
