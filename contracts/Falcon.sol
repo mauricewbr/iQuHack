@@ -566,15 +566,15 @@ contract Falcon
     // @ NOTE: The implementation has been updated by Mulliganaceous, but not tested for compile errors.
     ////////////////////////////////////////
 
-    function perform_KeccakF1600Round(uint64[][] A, uint64[][] E, uint64[] BC, uint64[] D, uint8[][] G) {
+    function perform_KeccakF1600Round(uint64[5][5] memory A, uint64[5][5] memory E, uint64[5] memory BC, uint64[5] memory D, uint8[5][5] memory G) public {
         /* Mulliganaceous' modified Keccak function */
         // Produce the initial BC and D vector
         for (uint8 k = 0; k < 5; k++)
             BC[k] = (A[0][k] ^ A[1][k] ^ A[2][k] ^ A[3][k] ^ A[4][k]);
         for (uint8 k = 0; k < 5; k++)
-            D[k] = BC[(k - 1) % 5] ^ (((BC[(k + 1) % 5], 1) << 1) ^ ((BC[(k + 1) % 5], 1) >> (63)));
+            D[k] = BC[(k - 1) % 5] ^ ((BC[(k + 1) % 5] << uint64(1)) ^ (BC[(k + 1) % 5] >> (63)));
             
-        // Ex: Note k is from {a,e,i,o,u} or {b,g,k,m,s}
+        // // Ex: Note k is from {a,e,i,o,u} or {b,g,k,m,s}
         uint8 offset = 0;
         for (uint8 j = 0; j < 5; j++) {
             for (uint8 k = 0; k < 5; k++) {
@@ -593,23 +593,23 @@ contract Falcon
     function KeccakF1600_StatePermute() public payable
     {
         // Deep copy A
-        uint64[5][5] A;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        uint64[5][5] memory A; 
+        for (uint i = 0; i < 5; i++) {
+            for (uint j = 0; j < 5; j++) {
                 A[i][j] = shake256_context64[5*i + j];
             }
         }
-        uint8[][] G = [[ 0, 1,62,28,27],
+        uint8[5][5] memory G = [[ 0, 1,62,28,27],
                        [36,44, 6,55,20],
                        [ 3,10,43,25,39],
                        [41,45,15,21, 8],
                        [18, 2,61,56,14]];
-        uint64[5][5] E;
-        uint64[5] BC;
-        uint64[5] D;
+        uint64[5][5] memory E;
+        uint64[5] memory BC;
+        uint64[5] memory D;
 
         // Perform loops
-        for (uint32 round = 0; round < NROUNDS; round += 2) {
+        for (int16 round = 0; round < NROUNDS; round += 2) {
             perform_KeccakF1600Round(A, E, BC, D, G);
             E[0][0] ^= KeccakF_RoundConstants[uint256(round)];
             perform_KeccakF1600Round(E, A, BC, D, G);
@@ -617,7 +617,7 @@ contract Falcon
         }
 
         // Copy back
-        for (uint i8 = 0; i < 5; i++) {
+        for (uint i = 0; i < 5; i++) {
             for (uint8 j = 0; j < 5; j++) {
                 shake256_context64[5*i + j] = A[i][j];
             }
@@ -889,7 +889,7 @@ contract Falcon
 
             // Input parameters supplied in member variable shake256_context64.
             // Output values are written to the same member variable.
-            // KeccakF1600_StatePermute();
+            KeccakF1600_StatePermute();
         }
 
         for (i = 0; i < cbInput; i++)
@@ -936,7 +936,7 @@ contract Falcon
         {
             // Input parameters supplied in member variable shake256_context64.
             // Output values are written to the same member variable.
-            // KeccakF1600_StatePermute();
+            KeccakF1600_StatePermute();
             for (i = 0; i < outlen && i < r; i++)
             {
                 h[h_offset + i] = uint8(shake256_context64[i >> 3] >> (8 * (i & 0x07)));
