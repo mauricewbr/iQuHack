@@ -1,10 +1,20 @@
 contract;
 
+// IMPORTS
+use std::storage::StorageVec;
+
 abi MyContract {
+    #[storage(write)]
+    fn constructor(owner: Address);
+    #[storage(read, write)]
     fn keccak_f1600_state_permute();
+    // #[storage(read, write)]
+    // fn keccak_inc_absorb(r: u32, pInput: Vec<u64>, ref mut cbInput: u32);
+    #[storage(read, write)]
+    fn keccak_inc_init();
 }
 
-// Constants
+// CONSTANTS
 const KECCAK_F_ROUND_CONSTANTS: [u64; 24] = [    // [12 rows of 2 64bit values: 24*8=192 bytes]
     0x0000000000000001, 0x0000000000008082,
     0x800000000000808a, 0x8000000080008000,
@@ -21,45 +31,47 @@ const KECCAK_F_ROUND_CONSTANTS: [u64; 24] = [    // [12 rows of 2 64bit values: 
 ];
 const NROUNDS: u8 = 24;
 
-impl MyContract for Contract {
-    fn keccak_f1600_state_permute() {
+// STORAGE
+storage {
+    owner: Address = Address { value: 0x0000000000000000000000000000000000000000000000000000000000000000 },
+    shake256_context64: StorageVec<u64> = StorageVec {},
+}
 
-        // Variables
-        let mut shake256_context64: [u64; 26] = 
-        [
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-            0, 0,
-        ];
+impl MyContract for Contract {
+    #[storage(write)]
+    fn constructor(owner: Address) {
+        storage.owner = owner;
+    }
+
+    #[storage(read, write)]
+    fn keccak_f1600_state_permute() {
         let mut round: u64 = 0;
 
-        let mut Aba: u64 = shake256_context64[0];
-        let mut Abe: u64 = shake256_context64[1];
-        let mut Abi: u64 = shake256_context64[2];
-        let mut Abo: u64 = shake256_context64[3];
-        let mut Abu: u64 = shake256_context64[4];
-        let mut Aga: u64 = shake256_context64[5];
-        let mut Age: u64 = shake256_context64[6];
-        let mut Agi: u64 = shake256_context64[7];
-        let mut Ago: u64 = shake256_context64[8];
-        let mut Agu: u64 = shake256_context64[9];
-        let mut Aka: u64 = shake256_context64[10];
-        let mut Ake: u64 = shake256_context64[11];
-        let mut Aki: u64 = shake256_context64[12];
-        let mut Ako: u64 = shake256_context64[13];
-        let mut Aku: u64 = shake256_context64[14];
-        let mut Ama: u64 = shake256_context64[15];
-        let mut Ame: u64 = shake256_context64[16];
-        let mut Ami: u64 = shake256_context64[17];
-        let mut Amo: u64 = shake256_context64[18];
-        let mut Amu: u64 = shake256_context64[19];
-        let mut Asa: u64 = shake256_context64[20];
-        let mut Ase: u64 = shake256_context64[21];
-        let mut Asi: u64 = shake256_context64[22];
-        let mut Aso: u64 = shake256_context64[23];
-        let mut Asu: u64 = shake256_context64[24];
+        let mut Aba: u64 = storage.shake256_context64.get(0).unwrap();
+        let mut Abe: u64 = storage.shake256_context64.get(1).unwrap();
+        let mut Abi: u64 = storage.shake256_context64.get(2).unwrap();
+        let mut Abo: u64 = storage.shake256_context64.get(3).unwrap();
+        let mut Abu: u64 = storage.shake256_context64.get(4).unwrap();
+        let mut Aga: u64 = storage.shake256_context64.get(5).unwrap();
+        let mut Age: u64 = storage.shake256_context64.get(6).unwrap();
+        let mut Agi: u64 = storage.shake256_context64.get(7).unwrap();
+        let mut Ago: u64 = storage.shake256_context64.get(8).unwrap();
+        let mut Agu: u64 = storage.shake256_context64.get(9).unwrap();
+        let mut Aka: u64 = storage.shake256_context64.get(10).unwrap();
+        let mut Ake: u64 = storage.shake256_context64.get(11).unwrap();
+        let mut Aki: u64 = storage.shake256_context64.get(12).unwrap();
+        let mut Ako: u64 = storage.shake256_context64.get(13).unwrap();
+        let mut Aku: u64 = storage.shake256_context64.get(14).unwrap();
+        let mut Ama: u64 = storage.shake256_context64.get(15).unwrap();
+        let mut Ame: u64 = storage.shake256_context64.get(16).unwrap();
+        let mut Ami: u64 = storage.shake256_context64.get(17).unwrap();
+        let mut Amo: u64 = storage.shake256_context64.get(18).unwrap();
+        let mut Amu: u64 = storage.shake256_context64.get(19).unwrap();
+        let mut Asa: u64 = storage.shake256_context64.get(20).unwrap();
+        let mut Ase: u64 = storage.shake256_context64.get(21).unwrap();
+        let mut Asi: u64 = storage.shake256_context64.get(22).unwrap();
+        let mut Aso: u64 = storage.shake256_context64.get(23).unwrap();
+        let mut Asu: u64 = storage.shake256_context64.get(24).unwrap();
 
         while round < NROUNDS {
             //////////////////////////////////////////////////
@@ -182,4 +194,35 @@ impl MyContract for Contract {
             round += 1;
         }
     }
+
+    #[storage(read, write)]
+    fn keccak_inc_init() {
+        let mut i: u32 = 0;
+        while i < 26 {
+            storage.shake256_context64.set(i, 0);
+            i += 1;
+        }
+    }
+}
+
+#[storage(read, write)]
+fn keccak_inc_absorb(r: u32, pInput: Vec<u64>, ref mut cbInput: u32) {
+    let mut msg_offset: u32 = 0;
+    
+    while (cbInput + storage.shake256_context64.get(25).unwrap() >= r) { // TO-DO: Turn shake256_context64 in storage variable
+        let mut i: u32 = 0;
+        while (i < r - storage.shake256_context64.get(25).unwrap()) {
+            storage.shake256_context64.set(((storage.shake256_context64.get(25).unwrap() + i) >> 3), storage.shake256_context64.get((storage.shake256_context64.get(25).unwrap() + i) >> 3).unwrap() ^ (pInput.get(msg_offset + 1).unwrap() << (8 * ((storage.shake256_context64.get(25).unwrap() + i) & 0x07))));
+            i += 1;
+        }
+        cbInput -= (r - storage.shake256_context64.get(25).unwrap());
+        msg_offset = msg_offset + (r - storage.shake256_context64.get(25).unwrap());
+        storage.shake256_context64.set(25, 0);
+    }
+    let mut j: u32 = 0;
+    while j < cbInput {
+        storage.shake256_context64.set(((storage.shake256_context64.get(25).unwrap() + j) >> 3), storage.shake256_context64.get((storage.shake256_context64.get(25).unwrap() + j) >> 3).unwrap() ^ (pInput.get(msg_offset + 1).unwrap() << (8 * ((storage.shake256_context64.get(25).unwrap() + j) & 0x07))));
+        j += 1;
+    }
+    storage.shake256_context64.set(25, storage.shake256_context64.get(25).unwrap() + cbInput);
 }
